@@ -144,6 +144,7 @@ impl Scanner {
             line: self.line as u64,
             literal,
         });
+        println!("Token: {:?}", self.tokens.last());
     }
 
     pub fn scan_tokens(&mut self) {
@@ -182,6 +183,8 @@ impl Scanner {
                     while self.peek() != '\n' && !self.is_at_end() {
                         self.advance();
                     }
+                } else if self.match_next('*') {
+                    self.c_style_comment();
                 } else {
                     self.add_token(TokenType::SLASH, None)
                 }
@@ -241,6 +244,20 @@ impl Scanner {
             .take(self.current - 1)
             .collect();
         self.add_token(TokenType::STRING, Some(Box::new(value)));
+    }
+
+    fn c_style_comment(&mut self) {
+        while (self.peek() != '*' || self.peek_next() != '/') && !self.is_at_end() {
+            if self.peek() == '\n' {
+                self.line += 1
+            }
+            self.advance();
+        }
+        if self.is_at_end() {
+            self.error(self.line, "Unclosed C style comment.".to_string());
+        }
+        self.advance();
+        self.advance();
     }
 
     fn number(&mut self) {
