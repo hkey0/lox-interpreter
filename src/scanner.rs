@@ -77,7 +77,7 @@ static KEYWORDS: Lazy<HashMap<&'static str, TokenType>> = Lazy::new(|| {
 });
 
 #[derive(Debug)]
-struct Token {
+pub struct Token {
     token_type: TokenType,
     lexeme: String,
     line: u64,
@@ -277,7 +277,7 @@ impl Scanner {
             .source
             .chars()
             .skip(self.start)
-            .take(self.current)
+            .take(self.current - self.start)
             .collect::<String>()
             .parse::<f64>()
             .unwrap();

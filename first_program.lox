@@ -1,11 +1,2 @@
-(()){} // grouping stuff
-!+-----/=<> <= == // operators
-"string"
-== ==
-shit
-or
-print
-/* 
-who cares
-*/
+((){ // grouping stuff
 
